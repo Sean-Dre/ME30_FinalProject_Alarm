@@ -1,1 +1,15 @@
-fadsfasdfa
+
+import time
+epoch = time.time()
+current = 0.0
+sec_day = 24*60*60
+sec_hour= 60*60
+sec_min = 60
+
+def PST(epoch): #Gets time in PST
+    current = int(epoch - 25200)
+    sec = (current % sec_day) % sec_hour % sec_min
+    min = (current % sec_day) % sec_hour // sec_min
+    hours = (current % sec_day) // sec_hour
+    
+    return print(str(hours) + ' ' + str(min) + ' ' + str(sec))
