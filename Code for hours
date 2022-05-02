@@ -1,0 +1,69 @@
+import time
+from adafruit_circuitplayground import cp
+
+def lightson(num):
+    cp.pixels.brightness = 0.3
+    if num <= 10:
+        cp.pixels[num-1] = (255, 0, 0)
+        print(num)
+    elif num >= 11 and num <= 20:
+        cp.pixels[num-11] = (0, 0, 255)
+        print(num)
+    elif num >= 21 and num <= 30:
+        cp.pixels[num-21] = (0, 255, 0)
+        print(num)
+    elif num >= 31 and num <= 40:
+        cp.pixels[num-31] = (255, 0, 255)
+        print(num)
+    elif num >= 41 and num <= 50:
+        cp.pixels[num-41] = (0, 255, 255)
+        print(num)
+    elif num >= 51 and num <= 59:
+        cp.pixels[num-51] = (255, 255, 255)
+        print(num)
+
+def lightsoff(num):
+    cp.pixels.brightness = 0.3
+    if num < 10:
+        cp.pixels[num] = (0, 0, 0)
+        print(num)
+    elif num >= 10 and num <= 19:
+        cp.pixels[num - 10] = (255, 0, 0)
+        print(num)
+    elif num >= 20 and num <= 29:
+        cp.pixels[num - 20] = (0, 0, 255)
+        print(num)
+    elif num >= 30 and num <= 39:
+        cp.pixels[num - 30] = (0, 255, 0)
+        print(num)
+    elif num >= 40 and num <= 49:
+        cp.pixels[num - 40] = (255, 0, 255)
+        print(num)
+    elif num >= 50 and num <= 59:
+        cp.pixels[num - 50] = (0, 255, 255)
+        print(num)
+
+
+
+hour = 0
+min = 0
+
+temp_hour = 0
+temp_min = 0
+
+while True:
+    while cp.switch:
+        if cp.button_a and not cp.button_b:
+            print('a ', end = ' ')
+            temp_hour+=1
+            lightson(temp_hour)
+            time.sleep(0.2)
+        elif cp.button_b and not cp.button_a:
+            print('b', end = ' ')
+            temp_hour-=1
+            lightsoff(temp_hour)
+            time.sleep(0.2)
+        elif temp_hour > 24 or temp_hour < 0:
+            temp_hour = 0
+            cp.pixels.fill((0,0,0))
+            
