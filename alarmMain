@@ -13,3 +13,49 @@ def PST(epoch): #Gets time in PST
     hours = (current % sec_day) // sec_hour
     
     return print(str(hours) + ' ' + str(min) + ' ' + str(sec))
+
+
+
+
+#CODE TO SET HOURS
+
+import time
+from adafruit_circuitplayground import cp
+
+hours = 0
+min = 0
+
+while True
+
+def lightson(num):
+    for i in range(num - 1):
+        while i <= 9:
+            cp.pixels[i] = (255, 0, 0)
+        while i >= 10 and i <= 19
+            cp.pixels[i] = (0, 0, 255)
+        while i >= 20 and i <= 29
+            cp.pixels[i] = (0, 255, 0)
+        while i >= 30 and i <= 39
+            cp.pixels[i] = (255, 0, 255)
+        while i >= 40 and i <= 49
+            cp.pixels[i] = (0, 255, 255)
+        while i >= 50 and i <= 59
+            cp.pixels[i] = (255, 255, 255)
+        
+
+
+    if cp.switch:
+        
+    else:
+            #record hours while showing light indicators
+        while cp.button_a == False and cp.button_b == False:
+             (hours < 10)
+                if cp.button_a == True:
+                    hours+=1
+                    lightson(hours)
+                elif cp.button_b == True:
+                    hours-=1
+                    lightson(hours)
+            #record min while showing light indicators
+        
+        #saving new alarm time
