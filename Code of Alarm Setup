@@ -50,17 +50,17 @@ def lightsoff(num):
     elif num >= 50 and num <= 59:
         cp.pixels[num - 50] = (0, 255, 255)
         print(num)
-
+        
 while True:
-    while cp.switch:
+    while cp.switch == True:
         while x == 0:
             if cp.tapped:
-                    hour = temp_hour
-                    print("Hour is now: " + str(hour))
-                    cp.pixels.fill((0,0,0))
-                    temp_hour = 0
-                    x = 1
-                    time.sleep(0.5)
+                hour = temp_hour
+                print("Hour is now: " + str(hour))
+                cp.pixels.fill((0,0,0))
+                temp_hour = 0
+                x = 1
+                time.sleep(0.5)
             elif cp.button_a and not cp.button_b:
                 print('a ', end = ' ')
                 temp_hour+=1
@@ -76,12 +76,12 @@ while True:
                 cp.pixels.fill((0,0,0))
         while x == 1:
             if cp.tapped:
-                    minute = temp_minute
-                    print("Minute is now: " + str(minute))
-                    cp.pixels.fill((0,0,0))
-                    temp_minute = 0
-                    x = 0
-                    time.sleep(0.5)
+                minute = temp_minute
+                print("Minute is now: " + str(minute))
+                cp.pixels.fill((0,0,0))
+                temp_minute = 0
+                x = 0
+                time.sleep(3)
             if cp.button_a and not cp.button_b:
                 print('a ', end = ' ')
                 temp_minute+=1
@@ -95,4 +95,12 @@ while True:
             elif temp_minute > 60 or temp_minute < 0:
                 temp_minute = 0
                 cp.pixels.fill((0,0,0))
-
+    while cp.switch == False:
+        temp_hour = 0
+        temp_minute = 0
+        cp.pixels.fill((0,0,0))
+        if cp.button_a and not cp.button_b:
+            cp.play_tone(1000, 0.5)
+            time.sleep(0.5)
+            cp.play_tone(1000, 0.5)
+            time.sleep(0.5)
