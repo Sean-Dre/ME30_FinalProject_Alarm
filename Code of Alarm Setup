@@ -65,12 +65,13 @@ def lightsoff(num):
         print(num)
         
 def PST(epoch): #Gets time in PST
-    current = int(epoch)
+    current = int(epoch) + 705267968 - 25215
     cur_sec = (current % sec_day) % sec_hour % sec_min
     cur_min = (current % sec_day) % sec_hour // sec_min
     cur_hour = (current % sec_day) // sec_hour
 
-    return cur_hours, cur_min, cur_sec
+    return cur_hour, cur_min, cur_sec
+
         
 while True:
     while cp.switch == True:
