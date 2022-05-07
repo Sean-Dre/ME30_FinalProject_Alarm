@@ -1,6 +1,8 @@
 import time
 from adafruit_circuitplayground import cp
 
+cp.detect_taps = 2
+
 hour = 0
 minute = 0
 x = 0
@@ -52,43 +54,45 @@ def lightsoff(num):
 while True:
     while cp.switch:
         while x == 0:
-            if cp.button_a and not cp.button_b:
+            if cp.tapped:
+                    hour = temp_hour
+                    print("Hour is now: " + str(hour))
+                    cp.pixels.fill((0,0,0))
+                    temp_hour = 0
+                    x = 1
+                    time.sleep(0.5)
+            elif cp.button_a and not cp.button_b:
                 print('a ', end = ' ')
                 temp_hour+=1
                 lightson(temp_hour)
-                time.sleep(0.2)
+                time.sleep(0.3)
             elif cp.button_b and not cp.button_a:
                 print('b', end = ' ')
                 temp_hour-=1
                 lightsoff(temp_hour)
-                time.sleep(0.2)
+                time.sleep(0.3)
             elif temp_hour > 24 or temp_hour < 0:
                 temp_hour = 0
                 cp.pixels.fill((0,0,0))
-            elif cp.button_b and cp.button_a:
-                hour = temp_hour 
-                print("Hour is now: " + str(hour))
-                cp.pixels.fill((0,0,0))
-                x = 1
-                time.sleep(0.5)
-                
         while x == 1:
+            if cp.tapped:
+                    minute = temp_minute
+                    print("Minute is now: " + str(minute))
+                    cp.pixels.fill((0,0,0))
+                    temp_minute = 0
+                    x = 0
+                    time.sleep(0.5)
             if cp.button_a and not cp.button_b:
                 print('a ', end = ' ')
                 temp_minute+=1
                 lightson(temp_minute)
-                time.sleep(0.2)
+                time.sleep(0.3)
             elif cp.button_b and not cp.button_a:
                 print('b', end = ' ')
                 temp_minute-=1
                 lightsoff(temp_minute)
-                time.sleep(0.2)
+                time.sleep(0.3)
             elif temp_minute > 60 or temp_minute < 0:
                 temp_minute = 0
                 cp.pixels.fill((0,0,0))
-            elif cp.button_b and cp.button_a:
-                minute = temp_minute
-                print("Minute is now: " + str(minute))
-                cp.pixels.fill((0,0,0))
-                x = 0
-                time.sleep(0.5)
+
