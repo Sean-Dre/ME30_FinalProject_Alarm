@@ -9,6 +9,19 @@ x = 0
 temp_hour = 0
 temp_minute = 0
 
+alarm_sec = 0
+curr_time = 0
+
+current = 0.0
+sec_day = 24*60*60
+sec_hour= 60*60
+sec_min = 60
+cur_hours = 0
+cur_min = 0
+cur_sec = 0
+snooze_hour = hour
+snooze_min = min
+
 def lightson(num):
     cp.pixels.brightness = 0.01
     if num <= 10:
