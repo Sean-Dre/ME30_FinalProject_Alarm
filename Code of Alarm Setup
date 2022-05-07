@@ -16,7 +16,7 @@ current = 0.0
 sec_day = 24*60*60
 sec_hour= 60*60
 sec_min = 60
-cur_hours = 0
+cur_hour = 0
 cur_min = 0
 cur_sec = 0
 snooze_hour = hour
@@ -127,7 +127,7 @@ while True:
             current = int(epoch)
             cur_sec = (current % sec_day) % sec_hour % sec_min
             cur_min = (current % sec_day) % sec_hour // sec_min
-            cur_hours = (current % sec_day) // sec_hour
+            cur_hour = (current % sec_day) // sec_hour
             
             return cur_hours, cur_min, cur_sec
         
