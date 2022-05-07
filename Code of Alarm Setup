@@ -60,14 +60,13 @@ def lightsoff(num):
     elif num >= 50 and num <= 59:
         cp.pixels[num - 50] = (0, 255, 255)
         print(num)
-
-def PST(epoch): #Gets time in PST
-    current = int(epoch) + 705267968 - 25215
-    cur_sec = (current % sec_day) % sec_hour % sec_min
+        
+def cur_time(epoch): #Gets time in PST
+    current = int(epoch)
     cur_min = (current % sec_day) % sec_hour // sec_min
     cur_hour = (current % sec_day) // sec_hour
 
-    return cur_hour, cur_min, cur_sec
+    return cur_hour, cur_min
 
 
 while True:
@@ -95,7 +94,7 @@ while True:
                 cp.pixels.fill((0,0,0))
         while x == 1:
             if cp.tapped:
-                cur_minute = temp_minute
+                cur_min = temp_minute
                 print("Minute is now: " + str(minute))
                 cp.pixels.fill((0,0,0))
                 temp_minute = 0
@@ -159,8 +158,15 @@ while True:
 
 
     while cp.switch == False:
-        epoch = time.time() #NEEDS TO BE INCLUDED IN THIS LOOP
-
+        if cur_hour < 12
+            hour_set_second = (11 - cur_hour)*60*60
+            minute_set_second = (60 - cur_min)*60
+            epoch = time.time() - hour_set_second - minute_set_second
+        if cur_hour >= 12
+            hour_set_second = (cur_hour - 12)*60*60
+            minute_set_second = cur_min*60
+            epoch = time.time() + hour_set_second + minute_set_second
+            
         snooze_hour = hour
         snooze_min = minute
 
@@ -178,7 +184,7 @@ while True:
 
             return snooze_hour, snooze_min
 
-        print(PST(epoch))
+        cur_hour, cur_minute = cur_time(epoch)
         time.sleep(0.3)
 
         if snooze_hour == cur_hour and snooze_min == cur_min:  #this is the alarm function
