@@ -64,6 +64,14 @@ def lightsoff(num):
         cp.pixels[num - 50] = (0, 255, 255)
         print(num)
         
+def PST(epoch): #Gets time in PST
+    current = int(epoch)
+    cur_sec = (current % sec_day) % sec_hour % sec_min
+    cur_min = (current % sec_day) % sec_hour // sec_min
+    cur_hour = (current % sec_day) // sec_hour
+
+    return cur_hours, cur_min, cur_sec
+        
 while True:
     while cp.switch == True:
         while x == 0:
@@ -122,14 +130,6 @@ while True:
            
     while cp.switch == False: 
         epoch = time.time() #NEEDS TO BE INCLUDED IN THIS LOOP
-        
-        def PST(epoch): #Gets time in PST
-            current = int(epoch)
-            cur_sec = (current % sec_day) % sec_hour % sec_min
-            cur_min = (current % sec_day) % sec_hour // sec_min
-            cur_hour = (current % sec_day) // sec_hour
-            
-            return cur_hours, cur_min, cur_sec
         
         def snooze(snooze_hour, snooze_min):      
             if snooze_min+5 > 59:
