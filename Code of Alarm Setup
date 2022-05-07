@@ -19,8 +19,8 @@ sec_min = 60
 cur_hour = 0
 cur_min = 0
 cur_sec = 0
-snooze_hour = hour
-snooze_min = min
+snooze_hour = 0
+snooze_min = 0
 
 def lightson(num):
     cp.pixels.brightness = 0.01
@@ -117,22 +117,20 @@ while True:
             elif temp_minute > 60 or temp_minute < 0:
                 temp_minute = 0
                 cp.pixels.fill((0,0,0))
-    while cp.switch == False:
-        if temp_hour > 0 or temp_minute > 0 :
-            temp_hour = 0
-            temp_minute = 0
-            cp.pixels.fill((0,0,0))
-        if cp.button_a and not cp.button_b:
-            cp.play_tone(1000, 0.5)
-            time.sleep(0.5)
-            cp.play_tone(1000, 0.5)
-            time.sleep(0.5)
             
            
     while cp.switch == False: 
         epoch = time.time() #NEEDS TO BE INCLUDED IN THIS LOOP
         
-        def snooze(snooze_hour, snooze_min):      
+        snooze_hour = hour
+        snooze_min = minute
+        
+        if temp_hour > 0 or temp_minute > 0:
+            temp_hour = 0
+            temp_minute = 0
+            cp.pixels.fill((0,0,0))
+    
+        def snooze(snooze_hour, snooze_min): #this is the snooze function. sets snooze to 5 min.
             if snooze_min+5 > 59:
                 snooze_hour += 1
                 snooze_min = (min+5)-60
@@ -143,4 +141,13 @@ while True:
             
         print(PST(epoch))
         time.sleep(2)
-        #if hour == cur_hours and min == min
+        
+        if snooze_hour == cur_hour and snooze_min == cur_min:  #this is the alarm function
+            cp.play_tone(1000, 0.5)
+            time.sleep(0.5)
+            cp.play_tone(1000, 0.5)
+            time.sleep(0.5)
+            if cp.button_b and not cp.button_a:
+                snooze(snooze_hour, snooze_min)
+            if cp.button_a and not cp.button_b: #this is where puzzle function happens
+                pass
