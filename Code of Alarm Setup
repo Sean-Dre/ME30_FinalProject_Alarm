@@ -1,4 +1,5 @@
 import time
+import random
 from adafruit_circuitplayground import cp
 
 cp.detect_taps = 2
@@ -12,10 +13,11 @@ temp_minute = 0
 alarm_sec = 0
 curr_time = 0
 
+current = 0.0
+sec_day = 24*60*60
 sec_hour= 60*60
 sec_min = 60
-cur_hour = 0
-cur_min = 0
+
 snooze_hour = 0
 snooze_min = 0
 
@@ -61,19 +63,29 @@ def lightsoff(num):
         cp.pixels[num - 50] = (0, 255, 255)
         print(num)
         
-def cur_time(epoch): #Gets time in PST
-    current = int(epoch)
+def PST(epoch): #Gets time in PST
+    current = int(epoch) + 705267968 - 25215
+    cur_sec = (current % sec_day) % sec_hour % sec_min
     cur_min = (current % sec_day) % sec_hour // sec_min
     cur_hour = (current % sec_day) // sec_hour
 
-    return cur_hour, cur_min
+    return cur_hour, cur_min, cur_sec
+    
+def snooze(snooze_hour, snooze_min): #this is the snooze function. sets snooze to 5 min.
+    if snooze_min+5 > 59:
+        snooze_hour += 1
+        snooze_min = (snooze_min+5)-60
+    elif snooze_min+5 < 59:
+        snooze_min+=5
+    
+    return snooze_hour, snooze_min
 
-
+        
 while True:
     while cp.switch == True:
         while x == 0:
             if cp.tapped:
-                cur_hour = temp_hour
+                hour = temp_hour
                 print("Hour is now: " + str(hour))
                 cp.pixels.fill((0,0,0))
                 temp_hour = 0
@@ -94,48 +106,6 @@ while True:
                 cp.pixels.fill((0,0,0))
         while x == 1:
             if cp.tapped:
-                cur_min = temp_minute
-                print("Minute is now: " + str(minute))
-                cp.pixels.fill((0,0,0))
-                temp_minute = 0
-                x = 2
-                time.sleep(3)
-            if cp.button_a and not cp.button_b:
-                print('a ', end = ' ')
-                temp_minute+=1
-                lightson(temp_minute)
-                time.sleep(0.3)
-            elif cp.button_b and not cp.button_a:
-                print('b', end = ' ')
-                temp_minute-=1
-                lightsoff(temp_minute)
-                time.sleep(0.3)
-            elif temp_minute > 60 or temp_minute < 0:
-                temp_minute = 0
-                cp.pixels.fill((0,0,0))
-        while x == 2:
-            if cp.tapped:
-                hour = temp_hour
-                print("Hour is now: " + str(hour))
-                cp.pixels.fill((0,0,0))
-                temp_hour = 0
-                x = 3
-                time.sleep(0.5)
-            elif cp.button_a and not cp.button_b:
-                print('a ', end = ' ')
-                temp_hour+=1
-                lightson(temp_hour)
-                time.sleep(0.3)
-            elif cp.button_b and not cp.button_a:
-                print('b', end = ' ')
-                temp_hour-=1
-                lightsoff(temp_hour)
-                time.sleep(0.3)
-            elif temp_hour > 24 or temp_hour < 0:
-                temp_hour = 0
-                cp.pixels.fill((0,0,0))
-        while x == 3:
-            if cp.tapped:
                 minute = temp_minute
                 print("Minute is now: " + str(minute))
                 cp.pixels.fill((0,0,0))
@@ -155,44 +125,33 @@ while True:
             elif temp_minute > 60 or temp_minute < 0:
                 temp_minute = 0
                 cp.pixels.fill((0,0,0))
-
-
-    while cp.switch == False:
-        if cur_hour < 12 
-            hour_set_second = (11 - cur_hour)*60*60
-            minute_set_second = (60 - cur_min)*60 + 2760
-            epoch = time.time() - hour_set_second - minute_set_second
-        if cur_hour >= 12
-            hour_set_second = (cur_hour - 12)*60*60
-            minute_set_second = cur_min*60 - 2760
-            epoch = time.time() + hour_set_second + minute_set_second
-            
         snooze_hour = hour
         snooze_min = minute
-
-        if temp_hour > 0 or temp_minute > 0:
-            temp_hour = 0
-            temp_minute = 0
-            cp.pixels.fill((0,0,0))
-
-        def snooze(snooze_hour, snooze_min): #this is the snooze function. sets snooze to 5 min.
-            if snooze_min+5 > 59:
-                snooze_hour += 1
-                snooze_min = (min+5)-60
-            elif snooze_min+5 < 59:
-                snooze_min+=5
-
-            return snooze_hour, snooze_min
-
-        cur_hour, cur_minute = cur_time(epoch)
-        time.sleep(0.3)
-
-        if snooze_hour == cur_hour and snooze_min == cur_min:  #this is the alarm function
+           
+    while cp.switch == False: 
+        epoch = time.time() #NEEDS TO BE INCLUDED IN THIS LOOP
+        
+        cp.pixels.fill((0,0,0))
+        
+        cur_hour, cur_min, cur_sec = PST(epoch)
+        print(PST(epoch))
+        print(snooze_hour, snooze_min)
+        print(cur_hour, cur_min)
+        time.sleep(2)
+        
+        while snooze_hour == cur_hour and snooze_min == cur_min:  #this is the alarm function
+            cp.pixels.brightness = 1
             cp.play_tone(1000, 0.5)
+            cp.pixels.fill((random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)))
             time.sleep(0.5)
             cp.play_tone(1000, 0.5)
+            cp.pixels.fill((random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)))
             time.sleep(0.5)
+            print(PST(epoch))
+            print(snooze_hour, snooze_min)
+            print(cur_hour, cur_min)
             if cp.button_b and not cp.button_a:
-                snooze(snooze_hour, snooze_min)
-            if cp.button_a and not cp.button_b: #this is where puzzle function happens
+                snooze_hour, snooze_min = snooze(snooze_hour, snooze_min)
+                print(snooze_hour, snooze_min)
+            elif cp.button_a and not cp.button_b: #this is where puzzle function happens
                 pass
