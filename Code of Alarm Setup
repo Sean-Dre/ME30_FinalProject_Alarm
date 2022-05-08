@@ -85,7 +85,7 @@ while True:
         while x == 0:
             if cp.tapped:
                 cur_hour = temp_hour
-                print("Hour is now: " + str(hour))
+                print("Acutal hour is now: " + str(hour))
                 cp.pixels.fill((0,0,0))
                 temp_hour = 0
                 x = 1
@@ -106,7 +106,7 @@ while True:
         while x == 1:
             if cp.tapped:
                 cur_min = temp_minute
-                print("Minute is now: " + str(minute))
+                print("Actual minute is now: " + str(minute))
                 cp.pixels.fill((0,0,0))
                 temp_minute = 0
                 x = 2
@@ -127,7 +127,7 @@ while True:
         while x == 2:
             if cp.tapped:
                 hour = temp_hour
-                print("Hour is now: " + str(hour))
+                print("Alarm hour is now: " + str(hour))
                 cp.pixels.fill((0,0,0))
                 temp_hour = 0
                 x = 3
@@ -148,7 +148,7 @@ while True:
         while x == 3:
             if cp.tapped:
                 minute = temp_minute
-                print("Minute is now: " + str(minute))
+                print("Alarm minute is now: " + str(minute))
                 cp.pixels.fill((0,0,0))
                 temp_minute = 0
                 x = 0
@@ -170,11 +170,11 @@ while True:
         snooze_min = minute
            
     while cp.switch == False: 
-        if cur_hour < 12 
+        if cur_hour < 12: 
             hour_set_second = (11 - cur_hour)*60*60
             minute_set_second = (60 - cur_min)*60 + 2760
             epoch = time.time() - hour_set_second - minute_set_second
-        if cur_hour >= 12
+        if cur_hour >= 12:
             hour_set_second = (cur_hour - 12)*60*60
             minute_set_second = cur_min*60 - 2760
             epoch = time.time() + hour_set_second + minute_set_second
