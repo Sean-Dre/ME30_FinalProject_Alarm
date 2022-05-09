@@ -224,3 +224,5 @@ while True:
                             else:
                                 task = task
                         task+=1
+                    snooze_hour = 0
+                    snooze_min = 0
