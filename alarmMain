@@ -75,29 +75,29 @@ def getTask():
     if color == 3:
         return quantity, color, (255, 255, 0)
 
-def setHourMin(cur_hour, temp_hour, num, x):
+def setHourMin(cur_time, temp_time, num, x):
     if cp.tapped:
-        cur_hour = temp_hour
+        cur_time = temp_time
         cp.pixels.fill((255,255,255))
         time.sleep(0.05)
         cp.pixels.fill((255,255,255))
         time.sleep(0.05)
         cp.pixels.fill((0,0,0))
-        temp_hour = 0
+        temp_time = 0
         x+=1
         time.sleep(0.5)
     elif cp.button_a and not cp.button_b:
-        temp_hour+=1
-        lightson(temp_hour)
+        temp_time+=1
+        lightson(temp_time)
         time.sleep(0.3)
     elif cp.button_b and not cp.button_a:
-        temp_hour-=1
-        lightsoff(temp_hour)
+        temp_time-=1
+        lightsoff(temp_time)
         time.sleep(0.3)
-    elif temp_hour > num or temp_hour < 0:
-        temp_hour = 0
+    elif temp_time > num or temp_time < 0:
+        temp_time = 0
         cp.pixels.fill((0,0,0))
-    return cur_hour, temp_hour, x
+    return cur_time, temp_time, x
         
 while True:
     while cp.switch == True:
