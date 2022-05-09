@@ -1,0 +1,226 @@
+import time
+import random
+from adafruit_circuitplayground import cp
+
+cp.detect_taps = 2
+
+hour = 0
+minute = 0
+x = 0
+temp_hour = 0
+temp_minute = 0
+
+alarm_sec = 0
+curr_time = 0
+
+sec_day = 24*60*60
+sec_hour = 60*60
+sec_min = 60
+cur_hour = 0
+cur_min = 0
+snooze_hour = 0
+snooze_min = 0
+
+task = 0
+
+def lightson(num):
+    cp.pixels.brightness = 0.01
+    if num <= 10:
+        cp.pixels[num-1] = (255, 0, 0)
+    elif num >= 11 and num <= 20:
+        cp.pixels[num-11] = (0, 0, 255)
+    elif num >= 21 and num <= 30:
+        cp.pixels[num-21] = (0, 255, 0)
+    elif num >= 31 and num <= 40:
+        cp.pixels[num-31] = (255, 0, 255)
+    elif num >= 41 and num <= 50:
+        cp.pixels[num-41] = (0, 255, 255)
+    elif num >= 51 and num <= 59:
+        cp.pixels[num-51] = (255, 255, 255)
+
+def lightsoff(num):
+    cp.pixels.brightness = 0.01
+    if num < 10:
+        cp.pixels[num] = (0, 0, 0)
+    elif num >= 10 and num <= 19:
+        cp.pixels[num - 10] = (255, 0, 0)
+    elif num >= 20 and num <= 29:
+        cp.pixels[num - 20] = (0, 0, 255)
+    elif num >= 30 and num <= 39:
+        cp.pixels[num - 30] = (0, 255, 0)
+    elif num >= 40 and num <= 49:
+        cp.pixels[num - 40] = (255, 0, 255)
+    elif num >= 50 and num <= 59:
+        cp.pixels[num - 50] = (0, 255, 255)
+        
+def cur_time(epoch): #Gets time in PST
+    current = int(epoch)
+    cur_min = (current % sec_day) % sec_hour // sec_min
+    cur_hour = (current % sec_day) // sec_hour
+
+    return cur_hour, cur_min
+    
+def snooze(snooze_hour, snooze_min): #this is the snooze function. sets snooze to 5 min.
+    if snooze_min+5 > 59:
+        snooze_hour += 1
+        snooze_min = (snooze_min+5)-60
+    elif snooze_min+5 < 59:
+        snooze_min+=5
+    
+    return snooze_hour, snooze_min
+
+def getTask():
+    quantity = random.randint(0, 9)
+    color = random.randint(0, 3)
+    if color == 0:
+        return quantity, color, (255, 0, 0)
+    if color == 1:
+        return quantity, color, (0, 255, 0)
+    if color == 2:
+        return quantity, color, (0, 0, 255)
+    if color == 3:
+        return quantity, color, (255, 255, 0)
+
+        
+while True:
+    while cp.switch == True:
+        while x == 0:
+            if cp.tapped:
+                cur_hour = temp_hour
+                cp.pixels.fill((0,0,0))
+                temp_hour = 0
+                x = 1
+                time.sleep(0.5)
+            elif cp.button_a and not cp.button_b:
+                temp_hour+=1
+                lightson(temp_hour)
+                time.sleep(0.3)
+            elif cp.button_b and not cp.button_a:
+                temp_hour-=1
+                lightsoff(temp_hour)
+                time.sleep(0.3)
+            elif temp_hour > 24 or temp_hour < 0:
+                temp_hour = 0
+                cp.pixels.fill((0,0,0))
+        while x == 1:
+            if cp.tapped:
+                cur_min = temp_minute
+                cp.pixels.fill((0,0,0))
+                temp_minute = 0
+                x = 2
+                time.sleep(3)
+            if cp.button_a and not cp.button_b:
+                temp_minute+=1
+                lightson(temp_minute)
+                time.sleep(0.3)
+            elif cp.button_b and not cp.button_a:
+                temp_minute-=1
+                lightsoff(temp_minute)
+                time.sleep(0.3)
+            elif temp_minute > 60 or temp_minute < 0:
+                temp_minute = 0
+                cp.pixels.fill((0,0,0))
+        while x == 2:
+            if cp.tapped:
+                hour = temp_hour
+                cp.pixels.fill((0,0,0))
+                temp_hour = 0
+                x = 3
+                time.sleep(0.5)
+            elif cp.button_a and not cp.button_b:
+                temp_hour+=1
+                lightson(temp_hour)
+                time.sleep(0.3)
+            elif cp.button_b and not cp.button_a:
+                temp_hour-=1
+                lightsoff(temp_hour)
+                time.sleep(0.3)
+            elif temp_hour > 24 or temp_hour < 0:
+                temp_hour = 0
+                cp.pixels.fill((0,0,0))
+        while x == 3:
+            if cp.tapped:
+                minute = temp_minute
+                cp.pixels.fill((0,0,0))
+                temp_minute = 0
+                x = 0
+                time.sleep(3)
+            if cp.button_a and not cp.button_b:
+                temp_minute+=1
+                lightson(temp_minute)
+                time.sleep(0.3)
+            elif cp.button_b and not cp.button_a:
+                temp_minute-=1
+                lightsoff(temp_minute)
+                time.sleep(0.3)
+            elif temp_minute > 60 or temp_minute < 0:
+                temp_minute = 0
+                cp.pixels.fill((0,0,0))
+        snooze_hour = hour
+        snooze_min = minute
+           
+    while cp.switch == False: 
+        if cur_hour < 12: 
+            hour_set_second = (11 - cur_hour)*60*60
+            minute_set_second = (60 - cur_min)*60 + 2760
+            epoch = time.time() - hour_set_second - minute_set_second
+        if cur_hour >= 12:
+            hour_set_second = (cur_hour - 12)*60*60
+            minute_set_second = cur_min*60 - 2760
+            epoch = time.time() + hour_set_second + minute_set_second
+            
+        cp.pixels.fill((0,0,0))
+        
+        cur_hour, cur_min = cur_time(epoch)
+        time.sleep(2)
+        
+        while snooze_hour == cur_hour and snooze_min == cur_min:  #this is the alarm function
+            cp.pixels.brightness = 1
+            cp.play_tone(1000, 0.5)
+            cp.pixels.fill((random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)))
+            time.sleep(0.5)
+            cp.play_tone(1000, 0.5)
+            cp.pixels.fill((random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)))
+            time.sleep(0.5)
+            if cp.button_b and not cp.button_a:
+                snooze_hour, snooze_min = snooze(snooze_hour, snooze_min)
+            elif cp.button_a and not cp.button_b: 
+                while task < 4:
+                    quantity, color, RGB = getTask()
+    
+                    if color == 0:
+                        cp.pixels[quantity] = RGB
+                        count = 0
+                        while count != quantity+1:
+                            if button_a and not button_b:
+                                count+=1
+                            else:
+                                task = task
+                        task+=1
+                    elif color == 1:
+                        cp.pixels[quantity] = RGB
+                        count = 0
+                        while count != quantity+1:
+                            if button_b and not button_a:
+                                count+=1
+                            else:
+                                task = task
+                        task+=1
+                    elif color == 2:
+                        cp.pixels[quantity] = RGB
+                        count = 0
+                        while count != quantity+1:
+                            if cp.tapped:
+                                count+=1
+                            else:
+                                task = task
+                        task+=1
+                    elif color == 3:
+                        cp.pixels[quantity] = RGB
+                        count = 0
+                        while count != quantity+1:
+                            if cp.shake(shake_threshold = 10):
+                                count+=1
+                            else:
+                                task = task
+                        task+=1
